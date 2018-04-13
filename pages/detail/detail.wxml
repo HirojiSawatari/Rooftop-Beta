@@ -1,0 +1,631 @@
+<view class="app" hidden="{{page_hidden}}"><component-share pageQRCodeData="{{pageQRCodeData}}"></component-share><component-backhome backToHomePage="{{backToHomePage}}"></component-backhome>
+<import src="../../components/wxParse/wxParse.wxml"/>
+
+<template name="zcFreeVessel1">
+  <view class="element free-vessel" style="{{data.style}}" data-event-params="{{data.eventParams}}" catchtap="{{data.eventHandler}}">
+
+<wxs module="pictureWxsModule">
+var isArray = function(array) {
+  return array.join instanceof Function;
+}
+module.exports.isArray = isArray;
+</wxs>
+
+<template name="zcPictureHead">
+  <block wx:if="{{real_value}}">
+    <block wx:if="{{pictureWxsModule.isArray(real_value)}}">
+      <view class="element picture" style="{{data.style}}" data-event-params="{{data.eventParams}}" data-imgArr="{{real_value}}" catchtap="{{data.eventHandler}}" wx:for="{{real_value}}"> 
+        <image src="{{real_value[index]}}" mode="scaleToFill"></image>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="element picture" style="{{data.style}}" data-event-params="{{data.eventParams}}" data-imgArr="{{real_value}}" catchtap="{{data.eventHandler}}">
+        <image src="{{real_value}}" mode="scaleToFill"></image>
+      </view>
+    </block>
+  </block>
+  <block wx:else>
+    <navigator url="../user/user">
+      <view class="element picture" style="{{data.style}}" data-event-params="{{data.eventParams}}" data-imgArr="{{data.content}}" catchtap="{{data.eventHandler}}">
+        <image src="{{data.content}}" mode="scaleToFill"></image>
+      </view>
+    </navigator>
+  </block>
+</template>
+
+<!-- 用户头像 -->
+<view class="ele-container">
+  <block wx:if="{{real_value}}">
+    <template is="zcPictureHead" data="{{data:data.content[0], detail_data: detail_data}}"></template>
+  </block>
+  <block wx:elif="{{detail_data && in_dynamic_vessel !== 'true'}}">
+    <template is="zcPictureHead" data="{{data:data.content[0], detail_data: detail_data}}"></template>
+  </block>
+  <block wx:elif="{{in_dynamic_vessel === 'true'}}">
+    <template is="zcPictureHead" data="{{data:data.content[0], detail_data: detail_data}}"></template>
+  </block>
+  <block wx:else>
+    <template is="zcPictureHead" data="{{data:data.content[0], detail_data: detail_data}}"></template>
+  </block>
+</view>
+
+<wxs module="pictureWxsModule">
+var isArray = function(array) {
+  return array.join instanceof Function;
+}
+module.exports.isArray = isArray;
+</wxs>
+
+
+<template name="zcPictureLike">
+  <block wx:if="{{real_value}}">
+    <block wx:if="{{pictureWxsModule.isArray(real_value)}}">
+      <view class="element picture" style="{{data.style}}" data-event-params="{{data.eventParams}}" data-imgArr="{{real_value}}" catchtap="clickLikeBtn" wx:for="{{real_value}}"> 
+        <image src="{{real_value[index]}}" mode="scaleToFill"></image>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="element picture" style="{{data.style}}" data-event-params="{{data.eventParams}}" data-imgArr="{{real_value}}" catchtap="clickLikeBtn">
+        <image src="{{real_value}}" mode="scaleToFill"></image>
+      </view>
+    </block>
+  </block>
+  <block wx:else>
+    <view class="element picture" style="{{data.style}}" data-event-params="{{data.eventParams}}" data-imgArr="{{data.content}}" catchtap="clickLikeBtn">
+      <image src="{{data.content}}" mode="scaleToFill"></image>
+    </view>
+  </block>
+</template>
+
+<!-- 点赞按钮 -->
+<view class="ele-container">
+  <block wx:if="{{real_value}}">
+    <template is="zcPictureLike" data="{{data:data.content[1], detail_data: detail_data}}"></template>
+  </block>
+  <block wx:elif="{{detail_data && in_dynamic_vessel !== 'true'}}">
+    <template is="zcPictureLike" data="{{data:data.content[1], detail_data: detail_data}}"></template>
+  </block>
+  <block wx:elif="{{in_dynamic_vessel === 'true'}}">
+    <template is="zcPictureLike" data="{{data:data.content[1], detail_data: detail_data}}"></template>
+  </block>
+  <block wx:else>
+    <template is="zcPictureLike" data="{{data:data.content[1], detail_data: detail_data}}"></template>
+  </block>
+</view><wxs module="textWxsModule">
+var isArray = function(array) {
+  return array instanceof Array;
+}
+module.exports.isArray = isArray;
+</wxs>
+
+<import src="../../components/wxParse/wxParse.wxml"/>
+
+<template name="zcText">
+  <block wx:if="{{real_value}}">
+    <block wx:if="{{textWxsModule.isArray(real_value)}}">
+      <view class="element text" style="{{data.style}}" data-event-params="{{data.eventParams}}" catchtap="{{data.eventHandler}}">
+        <block wx:if="{{ parent_form === 'form' }}">
+          {{ real_value }}
+        </block>
+        <block wx:else>
+          <view class="wxParse">
+            <template is="wxParse" data="{{wxParseData: real_value}}"/>
+          </view>
+        </block>
+      </view>
+    </block>
+    <block wx:else>
+      <text class="element text" style="{{data.style}}" data-event-params="{{data.eventParams}}" catchtap="{{data.eventHandler}}">{{real_value}}</text>
+    </block>
+  </block>
+  <block wx:elif="{{data.customFeature.segment == 'default_map' && form_data}}" >
+  <!-- 动态列表绑定地图 -->
+    <text class="element text" style="{{data.style}}" data-latitude="{{form_data.region_lat}}" data-longitude="{{form_data.region_lng}}" data-address="{{(form_data.region_string || '') + (form_data.region_detail || '')}}" data-event-params="{{data.eventParams}}" catchtap="{{data.eventHandler}}">{{(form_data.region_string || '') + (form_data.region_detail || '')}}</text>
+  </block>
+  <block wx:elif="{{data.customFeature.segment == 'default_map'}}" >
+  <!-- 详情页绑定地图 -->
+    <text class="element text" style="{{data.style}}" data-latitude="{{detail_data.region_lat}}" data-longitude="{{detail_data.region_lng}}" data-address="{{(detail_data.region_string || '') + (detail_data.region_detail || '')}}" catchtap="textToMap">{{(detail_data.region_string || '') + (detail_data.region_detail || '')}}</text>
+  </block>
+  <block wx:else>
+    <text class="element text" style="{{data.style}}" data-event-params="{{data.eventParams}}" catchtap="{{data.eventHandler}}">{{data.content}}</text>
+  </block>
+</template>
+
+<!-- 点赞数字 -->
+<view class="ele-container">
+  <block wx:if="{{data.content[2].customFeature.segment == 'default_map'}}">
+  <!-- 动态列表,动态容器 与详情页绑定地图 -->
+    <template is="zcText" data="{{data:data.content[2], form_data: item.form_data, detail_data: detail_data}}"></template>
+  </block>
+  <block wx:elif="{{real_value}}">
+    <template is="zcText" data="{{data:data.content[2], detail_data: detail_data}}"></template>
+  </block>
+  <block wx:elif="{{detail_data && in_dynamic_vessel !== 'true'}}">
+    <template is="zcText" data="{{data:data.content[2], detail_data: detail_data}}"></template>
+  </block>
+  <block wx:elif="{{in_dynamic_vessel === 'true'}}">
+    <template is="zcText" data="{{data:data.content[2], detail_data: detail_data}}"></template>
+  </block>
+  <block wx:else>
+    <template is="zcText" data="{{data:data.content[2], detail_data: detail_data}}"></template>
+  </block>
+</view>
+
+<wxs module="pictureWxsModule">
+var isArray = function(array) {
+  return array.join instanceof Function;
+}
+module.exports.isArray = isArray;
+</wxs>
+
+<template name="zcPicture">
+  <block wx:if="{{real_value}}">
+    <block wx:if="{{pictureWxsModule.isArray(real_value)}}">
+      <view class="element picture" style="{{data.style}}" data-event-params="{{data.eventParams}}" data-imgArr="{{real_value}}" catchtap="{{data.eventHandler}}" wx:for="{{real_value}}"> 
+        <image src="{{real_value[index]}}" mode="scaleToFill"></image>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="element picture" style="{{data.style}}" data-event-params="{{data.eventParams}}" data-imgArr="{{real_value}}" catchtap="{{data.eventHandler}}">
+        <image src="{{real_value}}" mode="scaleToFill"></image>
+      </view>
+    </block>
+  </block>
+  <block wx:else>
+    <view class="element picture" style="{{data.style}}" data-event-params="{{data.eventParams}}" data-imgArr="{{data.content}}" catchtap="{{data.eventHandler}}">
+      <image src="{{data.content}}" mode="scaleToFill"></image>
+    </view>
+  </block>
+</template>
+
+<!-- 评论按钮 -->
+<view class="ele-container">
+  <block wx:if="{{real_value}}">
+    <template is="zcPicture" data="{{data:data.content[3], detail_data: detail_data}}"></template>
+  </block>
+  <block wx:elif="{{detail_data && in_dynamic_vessel !== 'true'}}">
+    <template is="zcPicture" data="{{data:data.content[3], detail_data: detail_data}}"></template>
+  </block>
+  <block wx:elif="{{in_dynamic_vessel === 'true'}}">
+    <template is="zcPicture" data="{{data:data.content[3], detail_data: detail_data}}"></template>
+  </block>
+  <block wx:else>
+    <template is="zcPicture" data="{{data:data.content[3], detail_data: detail_data}}"></template>
+  </block>
+</view>
+
+<wxs module="textWxsModule">
+var isArray = function(array) {
+  return array instanceof Array;
+}
+module.exports.isArray = isArray;
+</wxs>
+
+<import src="../../components/wxParse/wxParse.wxml"/>
+
+<template name="zcText2">
+  <block wx:if="{{real_value}}">
+    <block wx:if="{{textWxsModule.isArray(real_value)}}">
+      <view class="element text" style="{{data.style}}" data-event-params="{{data.eventParams}}" catchtap="{{data.eventHandler}}">
+        <block wx:if="{{ parent_form === 'form' }}">
+          {{ real_value }}
+        </block>
+        <block wx:else>
+          <view class="wxParse">
+            <template is="wxParse" data="{{wxParseData: real_value}}"/>
+          </view>
+        </block>
+      </view>
+    </block>
+    <block wx:else>
+      <text class="element text" style="{{data.style}}" data-event-params="{{data.eventParams}}" catchtap="{{data.eventHandler}}">{{real_value}}</text>
+    </block>
+  </block>
+  <block wx:elif="{{data.customFeature.segment == 'default_map' && form_data}}" >
+  <!-- 动态列表绑定地图 -->
+    <text class="element text" style="{{data.style}}" data-latitude="{{form_data.region_lat}}" data-longitude="{{form_data.region_lng}}" data-address="{{(form_data.region_string || '') + (form_data.region_detail || '')}}" data-event-params="{{data.eventParams}}" catchtap="{{data.eventHandler}}">{{(form_data.region_string || '') + (form_data.region_detail || '')}}</text>
+  </block>
+  <block wx:elif="{{data.customFeature.segment == 'default_map'}}" >
+  <!-- 详情页绑定地图 -->
+    <text class="element text" style="{{data.style}}" data-latitude="{{detail_data.region_lat}}" data-longitude="{{detail_data.region_lng}}" data-address="{{(detail_data.region_string || '') + (detail_data.region_detail || '')}}" catchtap="textToMap">{{(detail_data.region_string || '') + (detail_data.region_detail || '')}}</text>
+  </block>
+  <block wx:else>
+    <text class="element text" style="{{data.style}}" data-event-params="{{data.eventParams}}" catchtap="{{data.eventHandler}}">{{count.count}}</text>
+  </block>
+</template>
+
+<!-- 评论数字 -->
+<view class="ele-container">
+  <block wx:if="{{data.content[4].customFeature.segment == 'default_map'}}">
+  <!-- 动态列表,动态容器 与详情页绑定地图 -->
+    <template is="zcText2" data="{{data:data.content[4], form_data: item.form_data, detail_data: detail_data, count: bbs.content}}"></template>
+  </block>
+  <block wx:elif="{{real_value}}">
+    <template is="zcText2" data="{{data:data.content[4], detail_data: detail_data, count: bbs.content}}"></template>
+  </block>
+  <block wx:elif="{{detail_data && in_dynamic_vessel !== 'true'}}">
+    <template is="zcText2" data="{{data:data.content[4], detail_data: detail_data, count: bbs.content}}"></template>
+  </block>
+  <block wx:elif="{{in_dynamic_vessel === 'true'}}">
+    <template is="zcText2" data="{{data:data.content[4], detail_data: detail_data, count: bbs.content}}"></template>
+  </block>
+  <block wx:else>
+    <template is="zcText2" data="{{data:data.content[4], detail_data: detail_data, count: bbs.content}}"></template>
+  </block>
+</view>
+
+<wxs module="pictureWxsModule">
+var isArray = function(array) {
+  return array.join instanceof Function;
+}
+module.exports.isArray = isArray;
+</wxs>
+
+<template name="zcPictureMain">
+  <block wx:if="{{real_value}}">
+    <block wx:if="{{pictureWxsModule.isArray(real_value)}}">
+      <view class="element picture" style="{{data.style}}" data-event-params="{{data.eventParams}}" data-imgArr="{{real_value}}" catchtap="{{data.eventHandler}}" wx:for="{{real_value}}"> 
+        <image src="{{real_value[index]}}" mode="aspectFill" bindtap="previewImage2"></image>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="element picture" style="{{data.style}}" data-event-params="{{data.eventParams}}" data-imgArr="{{real_value}}" catchtap="{{data.eventHandler}}">
+        <image src="{{real_value}}" mode="aspectFill" bindtap="previewImage2"></image>
+      </view>
+    </block>
+  </block>
+  <block wx:else>
+    <view class="element picture" style="{{data.style}}" data-event-params="{{data.eventParams}}" data-imgArr="{{data.content}}" catchtap="{{data.eventHandler}}">
+      <image src="{{data.content}}" mode="aspectFill" bindtap="previewImage2"></image>
+    </view>
+  </block>
+</template>
+
+<!-- 主图 -->
+<view class="ele-container">
+  <block wx:if="{{real_value}}">
+    <template is="zcPictureMain" data="{{data:data.content[5], detail_data: detail_data}}"></template>
+  </block>
+  <block wx:elif="{{detail_data && in_dynamic_vessel !== 'true'}}">
+    <template is="zcPictureMain" data="{{data:data.content[5], detail_data: detail_data}}"></template>
+  </block>
+  <block wx:elif="{{in_dynamic_vessel === 'true'}}">
+    <template is="zcPictureMain" data="{{data:data.content[5], detail_data: detail_data}}"></template>
+  </block>
+  <block wx:else>
+    <template is="zcPictureMain" data="{{data:data.content[5], detail_data: detail_data}}"></template>
+  </block>
+</view>
+
+<wxs module="textWxsModule">
+var isArray = function(array) {
+  return array instanceof Array;
+}
+module.exports.isArray = isArray;
+</wxs>
+
+<import src="../../components/wxParse/wxParse.wxml"/>
+
+<template name="zcText">
+  <block wx:if="{{real_value}}">
+    <block wx:if="{{textWxsModule.isArray(real_value)}}">
+      <view class="element text" style="{{data.style}}" data-event-params="{{data.eventParams}}" catchtap="{{data.eventHandler}}">
+        <block wx:if="{{ parent_form === 'form' }}">
+          {{ real_value }}
+        </block>
+        <block wx:else>
+          <view class="wxParse">
+            <template is="wxParse" data="{{wxParseData: real_value}}"/>
+          </view>
+        </block>
+      </view>
+    </block>
+    <block wx:else>
+      <text class="element text" style="{{data.style}}" data-event-params="{{data.eventParams}}" catchtap="{{data.eventHandler}}">{{real_value}}</text>
+    </block>
+  </block>
+  <block wx:elif="{{data.customFeature.segment == 'default_map' && form_data}}" >
+  <!-- 动态列表绑定地图 -->
+    <text class="element text" style="{{data.style}}" data-latitude="{{form_data.region_lat}}" data-longitude="{{form_data.region_lng}}" data-address="{{(form_data.region_string || '') + (form_data.region_detail || '')}}" data-event-params="{{data.eventParams}}" catchtap="{{data.eventHandler}}">{{(form_data.region_string || '') + (form_data.region_detail || '')}}</text>
+  </block>
+  <block wx:elif="{{data.customFeature.segment == 'default_map'}}" >
+  <!-- 详情页绑定地图 -->
+    <text class="element text" style="{{data.style}}" data-latitude="{{detail_data.region_lat}}" data-longitude="{{detail_data.region_lng}}" data-address="{{(detail_data.region_string || '') + (detail_data.region_detail || '')}}" catchtap="textToMap">{{(detail_data.region_string || '') + (detail_data.region_detail || '')}}</text>
+  </block>
+  <block wx:else>
+    <text class="element text" style="{{data.style}}" data-event-params="{{data.eventParams}}" catchtap="{{data.eventHandler}}">{{data.content}}</text>
+  </block>
+</template>
+
+<!-- 用户ID -->
+<view class="ele-container">
+  <block wx:if="{{data.content[6].customFeature.segment == 'default_map'}}">
+  <!-- 动态列表,动态容器 与详情页绑定地图 -->
+    <template is="zcText" data="{{data:data.content[6], form_data: item.form_data, detail_data: detail_data}}"></template>
+  </block>
+  <block wx:elif="{{real_value}}">
+    <template is="zcText" data="{{data:data.content[6], detail_data: detail_data}}"></template>
+  </block>
+  <block wx:elif="{{detail_data && in_dynamic_vessel !== 'true'}}">
+    <template is="zcText" data="{{data:data.content[6], detail_data: detail_data}}"></template>
+  </block>
+  <block wx:elif="{{in_dynamic_vessel === 'true'}}">
+    <template is="zcText" data="{{data:data.content[6], detail_data: detail_data}}"></template>
+  </block>
+  <block wx:else>
+    <template is="zcText" data="{{data:data.content[6], detail_data: detail_data}}"></template>
+  </block>
+</view>
+
+<wxs module="textWxsModule">
+var isArray = function(array) {
+  return array instanceof Array;
+}
+module.exports.isArray = isArray;
+</wxs>
+
+<import src="../../components/wxParse/wxParse.wxml"/>
+<template name="zcTextMain">
+  <block wx:if="{{real_value}}">
+    <block wx:if="{{textWxsModule.isArray(real_value)}}">
+      <view class="element text" style="{{data.style}}" data-event-params="{{data.eventParams}}" catchtap="{{data.eventHandler}}">
+        <block wx:if="{{ parent_form === 'form' }}">
+          {{ real_value }}
+        </block>
+        <block wx:else>
+          <view class="wxParse">
+            <template is="wxParse" data="{{wxParseData: real_value}}"/>
+          </view>
+        </block>
+      </view>
+    </block>
+    <block wx:else>
+      <text class="element text" style="{{data.style}}" data-event-params="{{data.eventParams}}" catchtap="{{data.eventHandler}}">{{real_value}}</text>
+    </block>
+  </block>
+  <block wx:elif="{{data.customFeature.segment == 'default_map' && form_data}}" >
+  <!-- 动态列表绑定地图 -->
+    <text class="element text" style="{{data.style}}" data-latitude="{{form_data.region_lat}}" data-longitude="{{form_data.region_lng}}" data-address="{{(form_data.region_string || '') + (form_data.region_detail || '')}}" data-event-params="{{data.eventParams}}" catchtap="{{data.eventHandler}}">{{(form_data.region_string || '') + (form_data.region_detail || '')}}</text>
+  </block>
+  <block wx:elif="{{data.customFeature.segment == 'default_map'}}" >
+  <!-- 详情页绑定地图 -->
+    <text class="element text" style="{{data.style}}" data-latitude="{{detail_data.region_lat}}" data-longitude="{{detail_data.region_lng}}" data-address="{{(detail_data.region_string || '') + (detail_data.region_detail || '')}}" catchtap="textToMap">{{(detail_data.region_string || '') + (detail_data.region_detail || '')}}</text>
+  </block>
+  <block wx:else>
+    <scroll-view scroll-y="true" style="{{data.styleView}}">
+      <text class="element text" style="{{data.style}}" data-event-params="{{data.eventParams}}" catchtap="{{data.eventHandler}}">{{data.content}}</text>
+    </scroll-view>
+  </block>
+</template>
+
+<!-- 主文字 -->
+<view class="ele-container">
+  <block wx:if="{{data.content[7].customFeature.segment == 'default_map'}}">
+  <!-- 动态列表,动态容器 与详情页绑定地图 -->
+    <template is="zcTextMain" data="{{data:data.content[7], form_data: item.form_data, detail_data: detail_data}}"></template>
+  </block>
+  <block wx:elif="{{real_value}}">
+    <template is="zcTextMain" data="{{data:data.content[7], detail_data: detail_data}}"></template>
+  </block>
+  <block wx:elif="{{detail_data && in_dynamic_vessel !== 'true'}}">
+    <template is="zcTextMain" data="{{data:data.content[7], detail_data: detail_data}}"></template>
+  </block>
+  <block wx:elif="{{in_dynamic_vessel === 'true'}}">
+    <template is="zcTextMain" data="{{data:data.content[7], detail_data: detail_data}}"></template>
+  </block>
+  <block wx:else>
+    <template is="zcTextMain" data="{{data:data.content[7], detail_data: detail_data}}"></template>
+  </block>
+</view>
+
+<wxs module="textWxsModule">
+var isArray = function(array) {
+  return array instanceof Array;
+}
+module.exports.isArray = isArray;
+</wxs>
+
+<import src="../../components/wxParse/wxParse.wxml"/>
+<template name="zcText">
+  <block wx:if="{{real_value}}">
+    <block wx:if="{{textWxsModule.isArray(real_value)}}">
+      <view class="element text" style="{{data.style}}" data-event-params="{{data.eventParams}}" catchtap="{{data.eventHandler}}">
+        <block wx:if="{{ parent_form === 'form' }}">
+          {{ real_value }}
+        </block>
+        <block wx:else>
+          <view class="wxParse">
+            <template is="wxParse" data="{{wxParseData: real_value}}"/>
+          </view>
+        </block>
+      </view>
+    </block>
+    <block wx:else>
+      <text class="element text" style="{{data.style}}" data-event-params="{{data.eventParams}}" catchtap="{{data.eventHandler}}">{{real_value}}</text>
+    </block>
+  </block>
+  <block wx:elif="{{data.customFeature.segment == 'default_map' && form_data}}" >
+  <!-- 动态列表绑定地图 -->
+    <text class="element text" style="{{data.style}}" data-latitude="{{form_data.region_lat}}" data-longitude="{{form_data.region_lng}}" data-address="{{(form_data.region_string || '') + (form_data.region_detail || '')}}" data-event-params="{{data.eventParams}}" catchtap="{{data.eventHandler}}">{{(form_data.region_string || '') + (form_data.region_detail || '')}}</text>
+  </block>
+  <block wx:elif="{{data.customFeature.segment == 'default_map'}}" >
+  <!-- 详情页绑定地图 -->
+    <text class="element text" style="{{data.style}}" data-latitude="{{detail_data.region_lat}}" data-longitude="{{detail_data.region_lng}}" data-address="{{(detail_data.region_string || '') + (detail_data.region_detail || '')}}" catchtap="textToMap">{{(detail_data.region_string || '') + (detail_data.region_detail || '')}}</text>
+  </block>
+  <block wx:else>
+    <text class="element text" style="{{data.style}}" data-event-params="{{data.eventParams}}" catchtap="{{data.eventHandler}}">{{data.content}}</text>
+  </block>
+</template>
+
+<!-- 日期 -->
+<view class="ele-container">
+  <block wx:if="{{data.content[8].customFeature.segment == 'default_map'}}">
+  <!-- 动态列表,动态容器 与详情页绑定地图 -->
+    <template is="zcText" data="{{data:data.content[8], form_data: item.form_data, detail_data: detail_data}}"></template>
+  </block>
+  <block wx:elif="{{real_value}}">
+    <template is="zcText" data="{{data:data.content[8], detail_data: detail_data}}"></template>
+  </block>
+  <block wx:elif="{{detail_data && in_dynamic_vessel !== 'true'}}">
+    <template is="zcText" data="{{data:data.content[8], detail_data: detail_data}}"></template>
+  </block>
+  <block wx:elif="{{in_dynamic_vessel === 'true'}}">
+    <template is="zcText" data="{{data:data.content[8], detail_data: detail_data}}"></template>
+  </block>
+  <block wx:else>
+    <template is="zcText" data="{{data:data.content[8], detail_data: detail_data}}"></template>
+  </block>
+</view>
+</view>
+</template>
+
+<!-- 第一template结束 -->
+<view class="ele-container">
+<block wx:if="{{real_value}}">
+  <template is="zcFreeVessel1" data="{{data:free_vessel1, real_value:real_value, detail_data: detail_data}}"></template>
+</block>
+<block wx:else>
+  <template is="zcFreeVessel1" data="{{data:free_vessel1, real_value:item, detail_data: detail_data ,index:index,item : item , parentType : free_vessel1.parentCompid , page_form : free_vessel1.page_form , dataId : dataId, bbs: bbs4}}"></template>
+</block>
+</view>
+
+
+
+<import src="../../components/wxParse/wxParse.wxml"/>
+<template name="zcFreeVessel2">
+  <view class="element free-vessel" style="{{data.style}}" data-event-params="{{data.eventParams}}" catchtap="{{data.eventHandler}}">
+
+<wxs module="pictureWxsModule">
+var isArray = function(array) {
+  return array.join instanceof Function;
+}
+module.exports.isArray = isArray;
+</wxs>
+
+<template name="zcPicture3">
+  <block wx:if="{{real_value}}">
+    <block wx:if="{{pictureWxsModule.isArray(real_value)}}">
+      <view class="element picture" style="{{data.style}}" data-event-params="{{data.eventParams}}" data-imgArr="{{real_value}}" catchtap="{{data.eventHandler}}" wx:for="{{real_value}}">
+        <map id="map" longitude="{{data.longitude}}" latitude="{{data.latitude}}" scale="17" markers="{{data.markers}}" show-location style="width: 100%; height: 100%"></map>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="element picture" style="{{data.style}}" data-event-params="{{data.eventParams}}" data-imgArr="{{real_value}}" catchtap="{{data.eventHandler}}">
+        <map id="map" longitude="{{data.longitude}}" latitude="{{data.latitude}}" scale="17" markers="{{data.markers}}" show-location style="width: 100%; height: 100%"></map>
+      </view>
+    </block>
+  </block>
+  <block wx:else>
+    <view class="element picture" style="{{data.style}}" data-event-params="{{data.eventParams}}" data-imgArr="{{data.content}}" catchtap="{{data.eventHandler}}">
+        <map id="map" longitude="{{data.longitude}}" latitude="{{data.latitude}}" scale="17" markers="{{data.markers}}" show-location style="width: 100%; height: 100%"></map>
+    </view>
+  </block>
+</template>
+
+<view class="ele-container">
+  <block wx:if="{{real_value}}">
+    <template is="zcPicture3" data="{{data:data.content[0], detail_data: detail_data}}"></template>
+  </block>
+  <block wx:elif="{{detail_data && in_dynamic_vessel !== 'true'}}">
+    <template is="zcPicture3" data="{{data:data.content[0], detail_data: detail_data}}"></template>
+  </block>
+  <block wx:elif="{{in_dynamic_vessel === 'true'}}">
+    <template is="zcPicture3" data="{{data:data.content[0], detail_data: detail_data}}"></template>
+  </block>
+  <block wx:else>
+    <template is="zcPicture3" data="{{data:data.content[0], detail_data: detail_data}}"></template>
+  </block>
+</view>
+</view>
+</template>
+
+<!-- 第二template结束 -->
+<view class="ele-container">
+<block wx:if="{{real_value}}">
+  <template is="zcFreeVessel2" data="{{data:free_vessel2, real_value:real_value, detail_data: detail_data}}"></template>
+</block>
+<block wx:else>
+  <template is="zcFreeVessel2" data="{{data:free_vessel2, real_value:item, detail_data: detail_data ,index:index,item : item , parentType : free_vessel2.parentCompid , page_form : free_vessel2.page_form , dataId : dataId}}"></template>
+</block>
+</view>
+
+
+<!-- 评论模块 -->
+<template name="zcBbs">
+  <view class="element bbs {{ data.customFeature.mode === 1 ? 'bbs-mode1' : '' }}" data-type="bbs" style="{{data.style}}">
+    <!-- 未知text -->
+    <view wx:if="{{ data.customFeature.mode !== 1 }}" class="comment-amount-p">
+      <text class="ca-span ico-moon icon-bubble" style="color: {{data.customFeature.themeColor}};"><text class="ca-span-num">{{ content.count || 0 }}</text></text>条评论
+    </view>
+
+    <!-- 输入框 -->
+    <view class="comment-box">
+      <view class="input-wrap">
+        <input placeholder="我也来说几句..." bindinput="bbsInputComment" value="{{ data.comment.text }}" data-compid="{{ data.compId }}"></input>
+      </view>
+      <!-- 发布按钮 -->
+      <view class="comment-operate-wrap">
+        <text class="comment-btn" catchtap="bbsPublishComment" data-compid="{{ data.compId }}" wx:if="{{data.customFeature.mode === 1}}">发布</text>
+        <text class="comment-btn" catchtap="bbsPublishComment" data-compid="{{ data.compId }}" wx:if="{{data.customFeature.mode !== 1}}" style="background-color: {{data.customFeature.themeColor}};">发布</text>
+      </view>
+    </view>
+    <!-- 评论显示 -->
+    <view class="lately-comment-p" wx:if="{{ data.customFeature.mode === 1 }}"><label style="background-color: {{data.customFeature.themeColor}};"></label>评论{{data.customFeature.mode === 1 ? '（' + (content.count || 0) + '）' : ''}}</view>
+    <!-- 无评论 -->
+    <block wx:if="{{ content.count == 0 }}">
+      <view class="empty-tip">
+        <image src="http://cdn.jisuapp.cn/static/webapp/images/none.png" mode="aspectFill" alt=""></image>
+        <text>快来抢沙发</text>
+      </view>
+    </block>
+
+    <!-- 有评论 -->
+    <block else>
+      <scroll-view class="comment-container js-list-container" scroll-y="true">
+        <!-- 循环评论数组 -->
+        <view wx:for="{{ content.data }}" wx:key="">
+          <view class="comment">
+            <!-- 标题栏&回复按钮 -->
+            <view>
+              <!-- 头像 -->
+              <image class="cover-img" src="{{ item.form_data.cover_thumb }}"></image>
+              <!-- 昵称&回复时间 -->
+              <view class="nickname-wrap">
+                <label class="nickname">{{ item.form_data.nickname }}</label>
+                <label class="add-time">{{ item.form_data.content.addTime }}</label>
+              </view>
+              <!-- 回复按钮 -->
+              <label wx:if="{{ data.customFeature.ifLike }}" class="bbs-content-btn ico-moon icon-heart {{ item.has_count == 1 ? 'active': '' }}" data-objrel="bbs_{{ item.form_data.id }}" data-counted="{{item.has_count}}" catchtap="changeCount" data-compid="{{ data.compId }}" data-parentcompid="{{ data.compId }}" data-index="{{ index }}">{{ item.count_num }}</label>
+              <label class="bbs-content-btn ico-moon icon-reply comment-reply-btn" catchtap="clickBbsReplyBtn" data-compid="{{ data.compId }}" data-index="{{ index }}">回复</label>
+            </view>
+
+            <!-- 评论内容 -->
+            <view class="comment-content">
+              <view class="comment-reference-text" wx:if="{{ item.form_data.content.reply }}">@{{ item.form_data.content.reply.nickname }}</view>
+              <view>{{ item.form_data.content.text }}</view>
+              <!-- 图片显示，之后去除 -->
+              <image class="comment-img" wx:if="{{ item.form_data.content.img }}" src="{{ item.form_data.content.img }}" mode="aspectFit" data-src="{{item.form_data.content.img}}" catchtap="previewImage"></image>
+            </view>
+          </view>
+
+          <!-- 回复按钮点击 -->
+          <view class="comment-box reply-comment-box" hidden="{{ !item.showReply }}">
+            <view class="input-wrap">
+              <input placeholder="回复 {{ item.form_data.nickname }}" bindinput="bbsInputReply" value="{{ item.replyText }}" data-compid="{{ data.compId }}" data-index="{{ index }}"></input>
+            </view>
+            <view class="comment-operate-wrap" >
+              <text class="comment-btn" catchtap="bbsPublishReply" data-compid="{{ data.compId }}" data-index="{{ index }}" wx:if="{{data.customFeature.mode === 1}}">发布</text>
+              <text class="comment-btn" catchtap="bbsPublishReply" data-compid="{{ data.compId }}" data-index="{{ index }}" wx:if="{{data.customFeature.mode !== 1}}" style="background-color: {{data.customFeature.themeColor}};">发布</text>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+    </block>
+  </view>
+</template>
+
+<!-- 评论模块结束 -->
+<view class="ele-container">
+  <template is="zcBbs" data="{{ data:bbs4, content:bbs4.content }}"></template>
+</view>
+</view>

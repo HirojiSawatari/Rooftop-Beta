@@ -1,0 +1,46 @@
+<view class="app" hidden="{{page_hidden}}"><component-share pageQRCodeData="{{pageQRCodeData}}"></component-share><component-backhome backToHomePage="{{backToHomePage}}"></component-backhome>
+
+<template name="zcCarousel">
+  <navigator url="../cur_hot/cur_hot">
+    <swiper indicator-dots="true" circular="true" autoplay="{{data.customFeature.autoplay}}" vertical="{{data.customFeature.vertical}}" interval="{{data.customFeature.interval*1000}}" duration="750" style="{{data.style}}">
+      <block wx:for="{{data.content}}" wx:key="">
+        <swiper-item>
+          <image src="{{item.pic}}" class="swiper-item" width="355" height="150" mode="aspectFill"/>
+        </swiper-item>
+      </block>
+    </swiper>
+  </navigator>
+</template>
+
+<view class="ele-container">
+  <template is="zcCarousel" data="{{data:swiper}}"></template>
+</view>
+
+
+<template name="zcAlbum">
+  <view class="element album {{data.html_mode}}" style="{{data.style}}">
+    <view class="album-container background-ele clearfix" style="{{data.ul_style}} ">
+      <view wx:for="{{data.li}}"
+            class="{{item.li_class}}"
+            style="{{item.li_style}}"
+            wx:key=""
+            data-event-params="{{item.eventParams}}"
+            catchtap="{{item.eventHandler}}">
+        <navigator url="../detail/detail?pic={{item.pic}}&text={{item.title}}&openid={{item.openid}}&lat={{item.lat}}&lng={{item.lng}}&like_num={{item.like_num}}&comment_num={{item.comment_num}}&timestamp={{item.timestamp}}&pid={{item.pid}}">
+          <image src="{{item.pic}}" style="{{item.img_style}}" mode="scaleToFill"></image>
+          <text class="title">{{item.title}}</text>
+        </navigator>
+      </view>
+    </view>
+  </view>
+</template>
+
+<view class="ele-container">
+  <template is="zcAlbum" data="{{data:album2}}"></template>
+</view>
+
+<!-- 上传图片 -->
+<view id="addBtn" class="addBtn" catchtap="clickPicUpBtn">  
+	  <image class="addBtn-img" src="../../images/addnew.png"></image>
+</view>
+</view>

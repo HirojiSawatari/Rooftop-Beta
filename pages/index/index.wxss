@@ -1,0 +1,21 @@
+page {
+  background-color: rgb(243, 243, 243);
+  margin-left: auto;
+}
+.addBtn {
+  z-index: 999;
+	position: absolute;
+	left: 10rpx;
+	top: 10rpx;
+  width: 80rpx;
+  height: 80rpx; 
+  background-color: #fff;
+  border-radius: 50%;
+}
+
+.addBtn-img {
+  width: 40rpx;
+  height: 40rpx; 
+  margin-top: 20rpx;
+  margin-left: 20rpx;
+}
