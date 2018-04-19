@@ -27,7 +27,7 @@
             data-event-params="{{item.eventParams}}"
             catchtap="{{item.eventHandler}}">
         <navigator url="../detail/detail?pic={{item.pic}}&text={{item.title}}&openid={{item.openid}}&lat={{item.lat}}&lng={{item.lng}}&like_num={{item.like_num}}&comment_num={{item.comment_num}}&timestamp={{item.timestamp}}&pid={{item.pid}}">
-          <image src="{{item.pic}}" style="{{item.img_style}}" mode="scaleToFill"></image>
+          <image src="{{item.pic}}" style="{{item.img_style}}" mode="aspectFill"></image>
           <text class="title">{{item.title}}</text>
         </navigator>
       </view>

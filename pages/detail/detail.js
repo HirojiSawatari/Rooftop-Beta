@@ -1,9 +1,11 @@
 var app      = getApp();
 
+var openid = ''
 var pid = ''
 var like = 0
 var com = 0
 var timestamp = '2011-11-11 11:11:11'
+var detail_text = ''
 
 var pageData = {
   data: {
@@ -72,7 +74,7 @@ var pageData = {
     	},{
     		"type":"text",
     		"style":"background-color:rgba(0, 0, 0, 0);border-color:rgb(34, 34, 34);border-style:none;border-width:4.6875rpx;color:rgb(0, 0, 0);font-size:25.78125rpx;height:44.53125rpx;line-height:46.875rpx;margin-left:0;margin-top:0;opacity:1;text-align:left;position:absolute;left:656.25rpx;top:82.03125rpx;margin-right:0;",
-    		"content":"21",
+    		"content":"0",
     		"customFeature":{
     			"boxColor":"rgb(0, 0, 0)",
     			"boxR":"5",
@@ -201,6 +203,7 @@ var pageData = {
   		"type":"bbs",
   		"style":"margin-top:0;background-color:#fff;margin-left:auto;",
   		"content":"",
+      "count": 1,
   		"customFeature":{
   			"mode":1,
   			"ifBindPage":false,
@@ -212,6 +215,12 @@ var pageData = {
   		"compId":"bbs4",
   		"parentCompid":"bbs4"
   	},
+    "bbs_content":{
+      "count": 0,
+      "list": [],
+      "username": [],
+      "avatar": []
+    },
   	"has_tabbar":0,
   	"page_hidden":true,
   	"page_form":"",
@@ -245,10 +254,12 @@ var pageData = {
   modelChoose: [],
   modelChooseId: '',
   modelChooseName: [],
+
   onLoad: function (e) {
     com = e.comment_num
     like = e.like_num
     pid = e.pid
+    openid = e.openid
     console.log(pid)
     var temptime = e.timestamp
     var n = 0
@@ -289,7 +300,10 @@ var pageData = {
       "free_vessel2.content[0].longitude": e.lng,
       "free_vessel2.content[0].markers[0].latitude": e.lat,
       "free_vessel2.content[0].markers[0].longitude": e.lng,
+      "bbs_content.count": e.comment_num
     })
+    //获取发状态用户信息
+    var that = this
     wx.request({
       url: 'https://www.katouspace.com/table_user.php?method=select&openID=' + e.openid,
       data: {},
@@ -297,6 +311,64 @@ var pageData = {
       // header: {}, // 设置请求的 header
       success: function (res) {
         console.log(res.data)
+        that.setData({
+          "free_vessel1.content[0].content": res.data.avatar,
+          "free_vessel1.content[6].content": res.data.name
+        })
+      },
+      fail: function () {
+        // fail
+      },
+      complete: function () {
+        // complete
+      }
+    })
+    //获取评论
+    wx.request({
+      url: 'https://www.katouspace.com/table_comment.php?method=select&pid=' + pid,
+      data: {},
+      method: 'GET', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
+      // header: {}, // 设置请求的 header
+      success: function (res) {
+        // success
+        var data = res.data
+        var len = data.length
+        console.log(data)
+        that.setData({
+          "free_vessel1.content[4].content": len,
+          "bbs_content.count": len,
+          "bbs_content.list": data
+        })
+        var name = new Array()
+        var avatar = new Array()
+        for (var i = 0; i < len; i++) {
+          var oid = data[i].openID
+          //获取发评论用户信息
+          wx.request({
+            url: 'https://www.katouspace.com/table_user.php?method=select&openID=' + oid,
+            data: {},
+            method: 'GET',
+            success: function (res) {
+              // success
+              var usdata = res.data
+              that.data.bbs_content.username[name.length] = usdata.name
+              that.data.bbs_content.avatar[name.length] = usdata.avatar
+              console.log(name.length)
+              that.setData({
+                "bbs_content.username": that.data.bbs_content.username,
+                "bbs_content.avatar": that.data.bbs_content.avatar
+              })
+              name[name.length] = usdata.name
+              avatar[name.length] = usdata.avatar
+            },
+            fail: function () {
+              // fail
+            },
+            complete: function () {
+              // complete
+            }
+          })
+        }
       },
       fail: function () {
         // fail
@@ -373,6 +445,37 @@ var pageData = {
       // 需要预览的图片http链接  使用split把字符串转数组。不然会报错  
     })
   }, 
+
+  //输入监听
+  bindTextAreaBlur: function (e) {
+    detail_text = e.detail.value
+  },
+
+  //评论发布
+  publishComment: function (e) {
+    console.log(pid)
+    wx.request({
+      url: 'https://www.katouspace.com/table_comment.php?method=insert&openID="' + app.userdata.openid + '"&pid=' + pid + '&detail_text="' + detail_text + '"&like_num=0',
+      data: {},
+      method: 'GET',
+      success: function (res) {
+        // success
+        console.log(res)
+        wx.showModal({
+          title: '提示',
+          content: '评论发表成功',
+        })
+        
+      },
+      fail: function () {
+        // fail
+      },
+      complete: function () {
+        // complete
+      }
+    })
+  },
+
   dataInitial: function () {
     app.pageDataInitial();
   },

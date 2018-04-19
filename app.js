@@ -2,6 +2,10 @@ var WxParse = require('components/wxParse/wxParse.js');
 var util    = require('utils/util.js');
 
 App({
+  userdata:{
+    openid: ""
+  },
+
   onLaunch: function () {
     let userInfo;
 

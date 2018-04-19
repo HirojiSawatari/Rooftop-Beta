@@ -199,6 +199,11 @@ var pageData = {
       "page_form":"",
       "compId":"free_vessel2"
     },
+    "list":[],
+    "date":[],
+    "avatar":[],
+    "username":[],
+    "commend_num":[],
     "has_tabbar":0,
     "page_hidden":true,
     "page_form":"",
@@ -233,6 +238,118 @@ var pageData = {
   modelChooseId: '',
   modelChooseName: [],
   onLoad: function (e) {
+    //获取发布表
+    var that = this
+    wx.request({
+      url: 'https://www.katouspace.com/table_publish.php?method=select_lid_time&lid=1',
+      data: {},
+      method: 'GET',
+      success: function (res) {
+        // success
+        that.setData({
+          "list": res.data
+        })
+        //转换日期格式
+        var date = new Array()
+        var n = 0
+        for(var x = 0; x < res.data.length; x++) {
+          var temptime = res.data[x].upload_time
+          var timestamp = ""
+          timestamp = timestamp.split('')
+          //遍历时间字符串
+          for (var i = 0; i < 12; i++) {
+            if (i === 4) {
+              timestamp.splice(n, 1, '-')
+              n = n + 1
+            }
+            else if (i === 6) {
+              timestamp.splice(n, 1, '-')
+              n = n + 1
+            }
+            else if (i === 8) {
+              timestamp.splice(n, 1, ' ')
+              n = n + 1
+            }
+            else if (i === 10) {
+              timestamp.splice(n, 1, ':')
+              n = n + 1
+            }
+            else if (i === 12) {
+              timestamp.splice(n, 1, ':')
+              n = n + 1
+            }
+            timestamp.splice(n, 1, temptime[i])
+            n = n + 1
+          }
+          timestamp = timestamp.join('')
+          date[x] = timestamp
+        }
+        that.setData({
+          "date": date
+        })
+        //获取用户信息
+        var name = new Array()
+        var avatar = new Array()
+        for (var i = 0; i < res.data.length; i++) {
+          var oid = res.data[i].openID
+          wx.request({
+            url: 'https://www.katouspace.com/table_user.php?method=select&openID=' + oid,
+            data: {},
+            method: 'GET',
+            success: function (res) {
+              // success
+              var usdata = res.data
+              that.data.username[name.length] = usdata.name
+              that.data.avatar[name.length] = usdata.avatar
+              console.log(name.length)
+              that.setData({
+                "username": that.data.username,
+                "avatar": that.data.avatar
+              })
+              name[name.length] = usdata.name
+              avatar[name.length] = usdata.avatar
+            },
+            fail: function () {
+              // fail
+            },
+            complete: function () {
+              // complete
+            }
+          })
+        }
+        //获取评论数字
+        var com_num = new Array()
+        for (var i = 0; i < res.data.length; i++) {
+          var pid = res.data[i].Pid
+          wx.request({
+            url: 'https://www.katouspace.com/table_comment.php?method=select&pid=' + pid,
+            data: {},
+            method: 'GET',
+            success: function (res) {
+              // success
+              var usdata = res.data
+              that.data.commend_num[com_num.length] = usdata.length
+              that.setData({
+                "commend_num": that.data.commend_num,
+              })
+              com_num[com_num.length] = usdata.length
+            },
+            fail: function () {
+              // fail
+            },
+            complete: function () {
+              // complete
+            }
+          })
+        }
+      },
+      fail: function () {
+        // fail
+      },
+      complete: function () {
+        // complete
+      }
+    })
     app.onPageLoad(e);
   },
   dataInitial: function () {

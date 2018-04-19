@@ -193,8 +193,8 @@ var pageData = {
               success: function (res) {
                 // success
                 // 获取openID
-                openid = res.data.openid
-                console.log(openid)
+                app.userdata.openid = res.data.openid
+                console.log(app.userdata.openid)
               },
               fail: function () {
                 // fail
@@ -315,16 +315,16 @@ var pageData = {
     })
     // 获取图片内容数据，配置文字图片
     wx.request({
-      url: 'https://www.katouspace.com/table_publish.php?method=select_lid&lid=1',
+      url: 'https://www.katouspace.com/table_publish.php?method=select_lid_time&lid=1',
       data: {},
       method: 'GET', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
       // header: {}, // 设置请求的 header
       success: function (res) {
         var len = res.data.length - 1
         // success
-        console.log(res.data[len])
-        for (var i = len; i > len - 6; i--) {
-          if ((len - i) === 0) {
+        console.log(res.data)
+        for (var i = 0; i < 7; i++) {
+          if (i === 0) {
             that.setData({
               "swiper.content[0].pic": res.data[i].picURL,
               "swiper.content[0].pid": res.data[i].Pid,
@@ -345,7 +345,7 @@ var pageData = {
               "album2.li[0].openid": res.data[i].openID
             })
           }
-          else if ((len - i) === 1) {
+          else if (i === 1) {
             that.setData({
               "swiper.content[1].pic": res.data[i].picURL,
               "swiper.content[1].pid": res.data[i].Pid,
@@ -366,7 +366,7 @@ var pageData = {
               "album2.li[1].openid": res.data[i].openID
             })
           }
-          else if ((len - i) === 2) {
+          else if (i === 2) {
             that.setData({
               "swiper.content[2].pic": res.data[i].picURL,
               "swiper.content[2].pid": res.data[i].Pid,
@@ -387,7 +387,7 @@ var pageData = {
               "album2.li[2].openid": res.data[i].openID
             })
           }
-          else if ((len - i) === 3) {
+          else if (i === 3) {
             that.setData({
               "swiper.content[3].pic": res.data[i].picURL,
               "swiper.content[3].pid": res.data[i].Pid,
@@ -408,7 +408,7 @@ var pageData = {
               "album2.li[3].openid": res.data[i].openID
             })
           }
-          else if ((len - i) === 4) {
+          else if (i === 4) {
             that.setData({
               "swiper.content[4].pic": res.data[i].picURL,
               "swiper.content[4].pid": res.data[i].Pid,
@@ -429,7 +429,7 @@ var pageData = {
               "album2.li[4].openid": res.data[i].openID
             })
           }
-          else if ((len - i) === 5) {
+          else if (i === 5) {
             that.setData({
               "swiper.content[5].pic": res.data[i].picURL,
               "swiper.content[5].pid": res.data[i].Pid,

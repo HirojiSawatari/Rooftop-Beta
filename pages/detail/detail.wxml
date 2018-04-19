@@ -25,11 +25,9 @@ module.exports.isArray = isArray;
     </block>
   </block>
   <block wx:else>
-    <navigator url="../user/user">
       <view class="element picture" style="{{data.style}}" data-event-params="{{data.eventParams}}" data-imgArr="{{data.content}}" catchtap="{{data.eventHandler}}">
         <image src="{{data.content}}" mode="scaleToFill"></image>
       </view>
-    </navigator>
   </block>
 </template>
 
@@ -238,19 +236,19 @@ module.exports.isArray = isArray;
 <view class="ele-container">
   <block wx:if="{{data.content[4].customFeature.segment == 'default_map'}}">
   <!-- 动态列表,动态容器 与详情页绑定地图 -->
-    <template is="zcText2" data="{{data:data.content[4], form_data: item.form_data, detail_data: detail_data, count: bbs.content}}"></template>
+    <template is="zcText" data="{{data:data.content[4], form_data: item.form_data, detail_data: detail_data}}"></template>
   </block>
   <block wx:elif="{{real_value}}">
-    <template is="zcText2" data="{{data:data.content[4], detail_data: detail_data, count: bbs.content}}"></template>
+    <template is="zcText" data="{{data:data.content[4], detail_data: detail_data}}"></template>
   </block>
   <block wx:elif="{{detail_data && in_dynamic_vessel !== 'true'}}">
-    <template is="zcText2" data="{{data:data.content[4], detail_data: detail_data, count: bbs.content}}"></template>
+    <template is="zcText" data="{{data:data.content[4], detail_data: detail_data}}"></template>
   </block>
   <block wx:elif="{{in_dynamic_vessel === 'true'}}">
-    <template is="zcText2" data="{{data:data.content[4], detail_data: detail_data, count: bbs.content}}"></template>
+    <template is="zcText" data="{{data:data.content[4], detail_data: detail_data}}"></template>
   </block>
   <block wx:else>
-    <template is="zcText2" data="{{data:data.content[4], detail_data: detail_data, count: bbs.content}}"></template>
+    <template is="zcText" data="{{data:data.content[4], detail_data: detail_data}}"></template>
   </block>
 </view>
 
@@ -561,48 +559,44 @@ module.exports.isArray = isArray;
     <!-- 输入框 -->
     <view class="comment-box">
       <view class="input-wrap">
-        <input placeholder="我也来说几句..." bindinput="bbsInputComment" value="{{ data.comment.text }}" data-compid="{{ data.compId }}"></input>
+        <input bindinput="bindTextAreaBlur" placeholder="我也来说几句..." value="{{ data.comment.text }}" data-compid="{{ data.compId }}"></input>
       </view>
       <!-- 发布按钮 -->
       <view class="comment-operate-wrap">
-        <text class="comment-btn" catchtap="bbsPublishComment" data-compid="{{ data.compId }}" wx:if="{{data.customFeature.mode === 1}}">发布</text>
-        <text class="comment-btn" catchtap="bbsPublishComment" data-compid="{{ data.compId }}" wx:if="{{data.customFeature.mode !== 1}}" style="background-color: {{data.customFeature.themeColor}};">发布</text>
+        <text class="comment-btn" catchtap="publishComment" data-compid="{{ data.compId }}" wx:if="{{data.customFeature.mode === 1}}">发布</text>
+        <text class="comment-btn" catchtap="publishComment" data-compid="{{ data.compId }}" wx:if="{{data.customFeature.mode !== 1}}" style="background-color: {{data.customFeature.themeColor}};">发布</text>
       </view>
     </view>
     <!-- 评论显示 -->
-    <view class="lately-comment-p" wx:if="{{ data.customFeature.mode === 1 }}"><label style="background-color: {{data.customFeature.themeColor}};"></label>评论{{data.customFeature.mode === 1 ? '（' + (content.count || 0) + '）' : ''}}</view>
+    <view class="lately-comment-p" wx:if="{{ data.customFeature.mode === 1 }}"><label style="background-color: {{data.customFeature.themeColor}};"></label>评论（{{list.count}}）</view>
     <!-- 无评论 -->
-    <block wx:if="{{ content.count == 0 }}">
+    <block wx:if="{{ list.count == 0 }}">
       <view class="empty-tip">
         <image src="http://cdn.jisuapp.cn/static/webapp/images/none.png" mode="aspectFill" alt=""></image>
         <text>快来抢沙发</text>
       </view>
     </block>
-
     <!-- 有评论 -->
-    <block else>
+    <block wx:if="{{ list.count != 0 }}">
       <scroll-view class="comment-container js-list-container" scroll-y="true">
         <!-- 循环评论数组 -->
-        <view wx:for="{{ content.data }}" wx:key="">
+        <view wx:for="{{ list.list }}" wx:key="">
           <view class="comment">
             <!-- 标题栏&回复按钮 -->
             <view>
               <!-- 头像 -->
-              <image class="cover-img" src="{{ item.form_data.cover_thumb }}"></image>
+              <image class="cover-img" src="{{ list.avatar[index] }}"></image>
               <!-- 昵称&回复时间 -->
               <view class="nickname-wrap">
-                <label class="nickname">{{ item.form_data.nickname }}</label>
-                <label class="add-time">{{ item.form_data.content.addTime }}</label>
+                <label class="nickname">{{ list.username[index] }}</label>
+                <label class="add-time">{{ item.timestamp }}</label>
               </view>
-              <!-- 回复按钮 -->
-              <label wx:if="{{ data.customFeature.ifLike }}" class="bbs-content-btn ico-moon icon-heart {{ item.has_count == 1 ? 'active': '' }}" data-objrel="bbs_{{ item.form_data.id }}" data-counted="{{item.has_count}}" catchtap="changeCount" data-compid="{{ data.compId }}" data-parentcompid="{{ data.compId }}" data-index="{{ index }}">{{ item.count_num }}</label>
-              <label class="bbs-content-btn ico-moon icon-reply comment-reply-btn" catchtap="clickBbsReplyBtn" data-compid="{{ data.compId }}" data-index="{{ index }}">回复</label>
             </view>
 
             <!-- 评论内容 -->
             <view class="comment-content">
               <view class="comment-reference-text" wx:if="{{ item.form_data.content.reply }}">@{{ item.form_data.content.reply.nickname }}</view>
-              <view>{{ item.form_data.content.text }}</view>
+              <view>{{ item.detail_text }}</view>
               <!-- 图片显示，之后去除 -->
               <image class="comment-img" wx:if="{{ item.form_data.content.img }}" src="{{ item.form_data.content.img }}" mode="aspectFit" data-src="{{item.form_data.content.img}}" catchtap="previewImage"></image>
             </view>
@@ -626,6 +620,6 @@ module.exports.isArray = isArray;
 
 <!-- 评论模块结束 -->
 <view class="ele-container">
-  <template is="zcBbs" data="{{ data:bbs4, content:bbs4.content }}"></template>
+  <template is="zcBbs" data="{{ data:bbs4, content:bbs4.content, list:bbs_content }}"></template>
 </view>
 </view>
