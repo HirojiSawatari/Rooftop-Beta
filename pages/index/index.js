@@ -313,9 +313,9 @@ var pageData = {
         })
       }
     })
-    // 获取图片内容数据，配置文字图片
+    // 获取最热图片内容数据，配置图片
     wx.request({
-      url: 'https://www.katouspace.com/table_publish.php?method=select_lid_time&lid=1',
+      url: 'https://www.katouspace.com/table_publish.php?method=select_lid_like&lid=1',
       data: {},
       method: 'GET', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
       // header: {}, // 设置请求的 header
@@ -333,7 +333,90 @@ var pageData = {
               "swiper.content[0].like_num": res.data[i].like_num,
               "swiper.content[0].lat": res.data[i].lat,
               "swiper.content[0].lng": res.data[i].lng,
-              "swiper.content[0].openid": res.data[i].openID,
+              "swiper.content[0].openid": res.data[i].openID
+            })
+          }
+          else if (i === 1) {
+            that.setData({
+              "swiper.content[1].pic": res.data[i].picURL,
+              "swiper.content[1].pid": res.data[i].Pid,
+              "swiper.content[1].timestamp": res.data[i].upload_time,
+              "swiper.content[1].comment_num": res.data[i].comment_num,
+              "swiper.content[1].like_num": res.data[i].like_num,
+              "swiper.content[1].lat": res.data[i].lat,
+              "swiper.content[1].lng": res.data[i].lng,
+              "swiper.content[1].openid": res.data[i].openID
+            })
+          }
+          else if (i === 2) {
+            that.setData({
+              "swiper.content[2].pic": res.data[i].picURL,
+              "swiper.content[2].pid": res.data[i].Pid,
+              "swiper.content[2].timestamp": res.data[i].upload_time,
+              "swiper.content[2].comment_num": res.data[i].comment_num,
+              "swiper.content[2].like_num": res.data[i].like_num,
+              "swiper.content[2].lat": res.data[i].lat,
+              "swiper.content[2].lng": res.data[i].lng,
+              "swiper.content[2].openid": res.data[i].openID
+            })
+          }
+          else if (i === 3) {
+            that.setData({
+              "swiper.content[3].pic": res.data[i].picURL,
+              "swiper.content[3].pid": res.data[i].Pid,
+              "swiper.content[3].timestamp": res.data[i].upload_time,
+              "swiper.content[3].comment_num": res.data[i].comment_num,
+              "swiper.content[3].like_num": res.data[i].like_num,
+              "swiper.content[3].lat": res.data[i].lat,
+              "swiper.content[3].lng": res.data[i].lng
+            })
+          }
+          else if (i === 4) {
+            that.setData({
+              "swiper.content[4].pic": res.data[i].picURL,
+              "swiper.content[4].pid": res.data[i].Pid,
+              "swiper.content[4].timestamp": res.data[i].upload_time,
+              "swiper.content[4].comment_num": res.data[i].comment_num,
+              "swiper.content[4].like_num": res.data[i].like_num,
+              "swiper.content[4].lat": res.data[i].lat,
+              "swiper.content[4].lng": res.data[i].lng,
+              "swiper.content[4].openid": res.data[i].openID
+            })
+          }
+          else if (i === 5) {
+            that.setData({
+              "swiper.content[5].pic": res.data[i].picURL,
+              "swiper.content[5].pid": res.data[i].Pid,
+              "swiper.content[5].timestamp": res.data[i].upload_time,
+              "swiper.content[5].comment_num": res.data[i].comment_num,
+              "swiper.content[5].like_num": res.data[i].like_num,
+              "swiper.content[5].lat": res.data[i].lat,
+              "swiper.content[5].lng": res.data[i].lng,
+              "swiper.content[5].openid": res.data[i].openID
+            })
+          }
+        }
+      },
+      fail: function () {
+        // fail
+      },
+      complete: function () {
+        // complete
+      }
+    })
+    // 获取最新图片内容数据，配置文字图片
+    wx.request({
+      url: 'https://www.katouspace.com/table_publish.php?method=select_lid_time&lid=1',
+      data: {},
+      method: 'GET', // OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT
+      // header: {}, // 设置请求的 header
+      success: function (res) {
+        var len = res.data.length - 1
+        // success
+        console.log(res.data)
+        for (var i = 0; i < 7; i++) {
+          if (i === 0) {
+            that.setData({
               "album2.li[0].pic": res.data[i].picURL,
               "album2.li[0].title": res.data[i].detail_text,
               "album2.li[0].pid": res.data[i].Pid,
@@ -347,14 +430,6 @@ var pageData = {
           }
           else if (i === 1) {
             that.setData({
-              "swiper.content[1].pic": res.data[i].picURL,
-              "swiper.content[1].pid": res.data[i].Pid,
-              "swiper.content[1].timestamp": res.data[i].upload_time,
-              "swiper.content[1].comment_num": res.data[i].comment_num,
-              "swiper.content[1].like_num": res.data[i].like_num,
-              "swiper.content[1].lat": res.data[i].lat,
-              "swiper.content[1].lng": res.data[i].lng,
-              "swiper.content[1].openid": res.data[i].openID,
               "album2.li[1].pic": res.data[i].picURL,
               "album2.li[1].title": res.data[i].detail_text,
               "album2.li[1].pid": res.data[i].Pid,
@@ -368,14 +443,6 @@ var pageData = {
           }
           else if (i === 2) {
             that.setData({
-              "swiper.content[2].pic": res.data[i].picURL,
-              "swiper.content[2].pid": res.data[i].Pid,
-              "swiper.content[2].timestamp": res.data[i].upload_time,
-              "swiper.content[2].comment_num": res.data[i].comment_num,
-              "swiper.content[2].like_num": res.data[i].like_num,
-              "swiper.content[2].lat": res.data[i].lat,
-              "swiper.content[2].lng": res.data[i].lng,
-              "swiper.content[2].openid": res.data[i].openID,
               "album2.li[2].pic": res.data[i].picURL,
               "album2.li[2].title": res.data[i].detail_text,
               "album2.li[2].pid": res.data[i].Pid,
@@ -389,14 +456,6 @@ var pageData = {
           }
           else if (i === 3) {
             that.setData({
-              "swiper.content[3].pic": res.data[i].picURL,
-              "swiper.content[3].pid": res.data[i].Pid,
-              "swiper.content[3].timestamp": res.data[i].upload_time,
-              "swiper.content[3].comment_num": res.data[i].comment_num,
-              "swiper.content[3].like_num": res.data[i].like_num,
-              "swiper.content[3].lat": res.data[i].lat,
-              "swiper.content[3].lng": res.data[i].lng,
-              "swiper.content[3].openid": res.data[i].openID,
               "album2.li[3].pic": res.data[i].picURL,
               "album2.li[3].title": res.data[i].detail_text,
               "album2.li[3].pid": res.data[i].Pid,
@@ -410,14 +469,6 @@ var pageData = {
           }
           else if (i === 4) {
             that.setData({
-              "swiper.content[4].pic": res.data[i].picURL,
-              "swiper.content[4].pid": res.data[i].Pid,
-              "swiper.content[4].timestamp": res.data[i].upload_time,
-              "swiper.content[4].comment_num": res.data[i].comment_num,
-              "swiper.content[4].like_num": res.data[i].like_num,
-              "swiper.content[4].lat": res.data[i].lat,
-              "swiper.content[4].lng": res.data[i].lng,
-              "swiper.content[4].openid": res.data[i].openID,
               "album2.li[4].pic": res.data[i].picURL,
               "album2.li[4].title": res.data[i].detail_text,
               "album2.li[4].pid": res.data[i].Pid,
@@ -431,14 +482,6 @@ var pageData = {
           }
           else if (i === 5) {
             that.setData({
-              "swiper.content[5].pic": res.data[i].picURL,
-              "swiper.content[5].pid": res.data[i].Pid,
-              "swiper.content[5].timestamp": res.data[i].upload_time,
-              "swiper.content[5].comment_num": res.data[i].comment_num,
-              "swiper.content[5].like_num": res.data[i].like_num,
-              "swiper.content[5].lat": res.data[i].lat,
-              "swiper.content[5].lng": res.data[i].lng,
-              "swiper.content[5].openid": res.data[i].openID,
               "album2.li[5].pic": res.data[i].picURL,
               "album2.li[5].title": res.data[i].detail_text,
               "album2.li[5].pid": res.data[i].Pid,
